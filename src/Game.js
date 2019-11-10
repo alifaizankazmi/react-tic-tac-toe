@@ -16,7 +16,8 @@ export default class Game extends React.Component {
     }
 
     handleClick(i) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const history = this.state.history
+            .slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         if (calculateWinner(squares) || squares[i]) {
@@ -26,7 +27,8 @@ export default class Game extends React.Component {
         this.setState({
             history: history.concat([
                 {
-                    squares: squares
+                    squares: squares,
+                    location: this.getDisplayLocation(i)
                 }
             ]),
             stepNumber: history.length,
@@ -41,6 +43,13 @@ export default class Game extends React.Component {
         });
     }
 
+    getDisplayLocation(index) {
+        return "(" + 
+          (index % 3 + 1) + ", " + 
+          (Math.floor(index / 3) + 1) + 
+        ")";
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -48,11 +57,16 @@ export default class Game extends React.Component {
 
         const moves = history.map((step, move) => {
             const desc = move ?
-                'Go to move #' + move :
+                'Go to move #' + move + ' ' + step.location :
                 'Go to game start';
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button 
+                        style={this.state.stepNumber === move? 
+                            {fontWeight: 'bold'}: {fontWeight: 'normal'}} 
+                        onClick={() => this.jumpTo(move)}>
+                        {desc}
+                    </button>
                 </li>
             );
         });
