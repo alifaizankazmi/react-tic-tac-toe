@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai';
+import { assert } from 'chai';
 import { mount } from 'enzyme';
 
 import React from 'react';
@@ -137,7 +137,8 @@ describe("Given the user clicks on the second square", () => {
             "Next player: X");
     });
 
-    it("the moves list should get updated", () => {
+    it(`the moves list should get updated and get 
+        displayed in ascending order by default`, () => {
         assert.equal(
             JSON.stringify(game.find('.game-info li button')
                 .map(button => button.text())),
@@ -145,6 +146,22 @@ describe("Given the user clicks on the second square", () => {
                 "Go to game start",
                 "Go to move #1 (1, 1)",
                 "Go to move #2 (2, 1)"]));
+    });
+
+    it(`the moves list should be sorted in
+        descending order when the toggle button
+        is clicked`, () => {
+        let toggleButton = game.find('.game-info input');
+        toggleButton.simulate('change');
+
+        assert.isFalse(game.state().isSortAsc);
+        assert.equal(
+            JSON.stringify(game.find('.game-info li button')
+                .map(button => button.text())),
+            JSON.stringify([
+                "Go to move #2 (2, 1)",
+                "Go to move #1 (1, 1)",
+                "Go to game start"]));        
     });
 });
 

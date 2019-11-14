@@ -11,7 +11,8 @@ export default class Game extends React.Component {
                 }
             ],
             stepNumber: 0,
-            xIsNext: true
+            xIsNext: true,
+            isSortAsc: true
         };
     }
 
@@ -55,7 +56,7 @@ export default class Game extends React.Component {
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
 
-        const moves = history.map((step, move) => {
+        let moves = history.map((step, move) => {
             const desc = move ?
                 'Go to move #' + move + ' ' + step.location :
                 'Go to game start';
@@ -70,6 +71,10 @@ export default class Game extends React.Component {
                 </li>
             );
         });
+
+        if(!this.state.isSortAsc) {
+            moves = moves.reverse();
+        }
 
         let status;
         if (winner) {
@@ -88,6 +93,16 @@ export default class Game extends React.Component {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
+                    <label className="switch">
+                        <input type="checkbox" 
+                            checked={this.state.isSortAsc}
+                            onChange={() => this.setState({isSortAsc: !this.state.isSortAsc})}
+                        />
+                        <span className="slider round"></span>
+                    </label>
+                    <label className="switch-text">
+                        {this.state.isSortAsc? "Ascending": "Descending"}
+                    </label>
                     <ol>{moves}</ol>
                 </div>
             </div>
