@@ -79,6 +79,8 @@ export default class Game extends React.Component {
         let status;
         if (winner) {
             status = "Winner: " + winner;
+        } else if(!current.squares.includes(null)) {
+            status = "Game ended in a draw";
         } else {
             status = "Next player: " + (this.state.xIsNext ? "X" : "O");
         }
@@ -89,6 +91,7 @@ export default class Game extends React.Component {
                     <Board
                         squares={current.squares}
                         onClick={i => this.handleClick(i)}
+                        winner={winner}
                     />
                 </div>
                 <div className="game-info">
@@ -123,7 +126,9 @@ function calculateWinner(squares) {
     ];
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        if (squares[a] && 
+            squares[a] === squares[b] && 
+            squares[a] === squares[c]) {
             return squares[a];
         }
     }

@@ -309,6 +309,18 @@ describe("When the X user makes a winning move", () => {
 
         assertWinningState(game);
     });
+
+    it("then the winning squares should get highlighted", () => {
+        game.find('button.square')
+            .filterWhere(square => square.text() === 'X')
+            .forEach(square => 
+                assert.isTrue(square.hasClass('winner')));
+        
+        game.find('button.square')
+            .filterWhere(square => square.text() === 'O')
+            .forEach(square => 
+                assert.isFalse(square.hasClass('winner')));
+    });
 });
 
 describe("When the O user makes a winning move", () => {
@@ -346,6 +358,18 @@ describe("When the O user makes a winning move", () => {
 
         assertWinningState(game);
     });
+
+    it("then the winning squares should get highlighted", () => {
+        game.find('button.square')
+            .filterWhere(square => square.text() === 'O')
+            .forEach(square => 
+                assert.isTrue(square.hasClass('winner')));
+
+        game.find('button.square')
+            .filterWhere(square => square.text() === 'X')
+            .forEach(square => 
+                assert.isFalse(square.hasClass('winner')));
+    });
 });
 
 describe("When no user makes a winning move", () => {
@@ -358,10 +382,10 @@ describe("When no user makes a winning move", () => {
                 'X', 'O', 'X' ,
                 'O', 'X', 'O']));
         assert.equal(getStatusText(game),
-            "Next player: O");
-        };
+            "Game ended in a draw");
+    };
 
-        beforeEach(() => {
+    beforeEach(() => {
         game = mount(<Game />);
         clickSquare(game, 0);
         clickSquare(game, 4);
@@ -376,7 +400,7 @@ describe("When no user makes a winning move", () => {
 
     it("then the status should get updated", () => {
         assert.equal(getStatusText(game),
-            "Next player: O");        
+            "Game ended in a draw");        
     });
 
     it("then no more moves should be possible", () => {
@@ -385,5 +409,11 @@ describe("When no user makes a winning move", () => {
         clickSquare(game, 5);
 
         assertDrawState(game);
+    });
+
+    it("then no squares should be highlighted", () => {
+        game.find('button.square')
+            .forEach(square => 
+                assert.isFalse(square.hasClass('winner')));      
     });
 });

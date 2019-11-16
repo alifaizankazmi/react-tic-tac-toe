@@ -8,8 +8,19 @@ export default class Board extends React.Component {
                 key={i}
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
+                isWinner={this.isSquareInWinningMove(i)}
             />
         );
+    }
+
+    isSquareInWinningMove(i) {
+        let winner = this.props.winner;
+
+        if(!winner) {
+            return false;
+        }
+
+        return this.props.squares[i] === winner;
     }
 
     render() {
